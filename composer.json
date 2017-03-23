@@ -1,0 +1,35 @@
+{
+    "name": "omnipay/twispay",
+    "type": "library",
+    "description": "Twispay driver for the Omnipay payment processing library",
+    "keywords": [
+        "twispay",
+        "gateway",
+        "merchant",
+        "omnipay",
+        "pay",
+        "payment"
+    ],
+    "homepage": "https://github.com/prmrgt/omnipay-twispay",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ProEmergotech Kft",
+            "email": "andor.tittel@proemergotech.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Omnipay\\Twispay\\" : "src/" }
+    },
+    "require": {
+        "omnipay/common": "~2.0"
+    },
+    "require-dev": {
+        "omnipay/tests": "~2.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.0.x-dev"
+        }
+    }
+}

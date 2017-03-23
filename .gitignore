@@ -15,3 +15,13 @@ bootstrap/cache/
 .rocketeer/
 
 .idea/
+
+/vendor
+composer.lock
+composer.phar
+phpunit.xml
+.directory
+dirlist.app
+dirlist.cache
+dirlist.vendor
+documents/
