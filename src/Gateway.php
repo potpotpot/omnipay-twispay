@@ -5,6 +5,7 @@ namespace Omnipay\Twispay;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Twispay\Message\AuthorizeRequest;
+use Omnipay\Twispay\Message\FetchOrdersRequest;
 
 /**
  * Twispay Gateway
@@ -91,8 +92,8 @@ class Gateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return [
-            'apiKey' => $this->apiKey,
-            'siteId' => $this->siteId,
+            'apiKey' => $this->getApiKey(),
+            'siteId' => $this->getSiteId(),
             'notifyUrl' => '',
             'returnUrl' => '',
             'cancelUrl' => '',
@@ -101,6 +102,12 @@ class Gateway extends AbstractGateway
     }
 
     // ------------ Requests ------------ //
+
+
+    public function fetchOrders(): RequestInterface
+    {
+        return $this->createRequest(FetchOrdersRequest::class, $this->getDefaultParameters());
+    }
 
     /**
      * Create an authorize request.

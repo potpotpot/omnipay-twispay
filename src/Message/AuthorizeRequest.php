@@ -2,7 +2,6 @@
 
 namespace Omnipay\Twispay\Message;
 
-use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Message\ResponseInterface;
 
 /**
