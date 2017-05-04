@@ -3,6 +3,7 @@
 namespace Omnipay\Twispay\Message;
 
 use Omnipay\Common\Message\AbstractRequest;
+use Omnipay\Common\Message\ResponseInterface;
 
 /**
  * Twispay Authorize Request
@@ -57,20 +58,20 @@ class AuthorizeRequest extends AbstractRequest
 
         $this->getCard()->validate();
 
-        return array('amount' => $this->getAmount());
+        return ['amount' => $this->getAmount()];
     }
 
     /**
      * @param mixed $data
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function sendData($data)
     {
-        $data['reference'] = uniqid();
+        // TODO rendes logikat implementalni [andor]
         $data['success'] = 0 === substr($this->getCard()->getNumber(), -1, 1) % 2;
         $data['message'] = $data['success'] ? 'Success' : 'Failure';
 
-        return $this->response = new Response($this, $data);
+        return $this->response = new AuthorizeResponse($this, $data);
     }
 }

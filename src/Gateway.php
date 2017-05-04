@@ -55,6 +55,7 @@ use Omnipay\Twispay\Message\AuthorizeRequest;
  * }
  * </code>
  *
+ * @method \Omnipay\Common\Message\RequestInterface purchase(array $options = [])
  * @method \Omnipay\Common\Message\RequestInterface completeAuthorize(array $options = [])
  * @method \Omnipay\Common\Message\RequestInterface capture(array $options = [])
  * @method \Omnipay\Common\Message\RequestInterface completePurchase(array $options = [])
@@ -67,6 +68,16 @@ use Omnipay\Twispay\Message\AuthorizeRequest;
 class Gateway extends AbstractGateway
 {
     /**
+     * @var string
+     */
+    private $apiKey = '4d4cab364364f3dcb88f9c69c305573a';
+
+    /**
+     * @var int
+     */
+    private $siteId = 73;
+
+    /**
      * @return string
      */
     public function getName()
@@ -75,22 +86,21 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultParameters()
     {
-        return [];
+        return [
+            'apiKey' => $this->apiKey,
+            'siteId' => $this->siteId,
+            'notifyUrl' => '',
+            'returnUrl' => '',
+            'cancelUrl' => '',
+            'testMode' => true,
+        ];
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return RequestInterface
-     */
-    public function purchase(array $parameters = []): RequestInterface
-    {
-        return $this->authorize($parameters);
-    }
+    // ------------ Requests ------------ //
 
     /**
      * Create an authorize request.
@@ -102,6 +112,108 @@ class Gateway extends AbstractGateway
     public function authorize(array $parameters = []): RequestInterface
     {
         return $this->createRequest(AuthorizeRequest::class, $parameters);
+    }
+
+    // ------------ Getter'n'Setters ------------ //
+
+    /**
+     *
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->getParameter('apiKey');
+    }
+
+    /**
+     *
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function setApiKey($value)
+    {
+        return $this->setParameter('apiKey', $value);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getSiteId()
+    {
+        return $this->getParameter('siteId');
+    }
+
+    /**
+     *
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function setSiteId($value)
+    {
+        return $this->setParameter('siteId', $value);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getNotifyUrl()
+    {
+        return $this->getParameter('notifyUrl');
+    }
+
+    /**
+     *
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function setNotifyUrl($value)
+    {
+        return $this->setParameter('notifyUrl', $value);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getReturnUrl()
+    {
+        return $this->getParameter('returnUrl');
+    }
+
+    /**
+     *
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function setReturnUrl($value)
+    {
+        return $this->setParameter('returnUrl', $value);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getCancelUrl()
+    {
+        return $this->getParameter('cancelUrl');
+    }
+
+    /**
+     *
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function setCancelUrl($value)
+    {
+        return $this->setParameter('cancelUrl', $value);
     }
 
     /**

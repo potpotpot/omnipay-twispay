@@ -11,12 +11,17 @@ use Omnipay\Common\Message\AbstractResponse;
  *
  * @see \Omnipay\Twispay\Gateway
  */
-class Response extends AbstractResponse
+class AuthorizeResponse extends AbstractResponse
 {
     public function isSuccessful()
     {
         return
             isset($this->data['success'])
             && $this->data['success'];
+    }
+
+    public function getMessage()
+    {
+        return $this->data['message'];
     }
 }
