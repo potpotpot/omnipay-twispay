@@ -28,6 +28,8 @@ class FetchOrdersRequest extends AbstractRequest
         $request->setHeader('Content-type', 'application/json');
         $request->addHeader('Accept', 'application/json');
 
+//        print_r([__METHOD__ . __LINE__, $this->getApiAuthToken(),$request->getHeaders()]); exit;
+
         $httpResponse = $request->send();
 
         return $this->response = new FetchOrdersResponse($this, $httpResponse->json());

@@ -6,6 +6,16 @@ use Omnipay\Common\Message\AbstractRequest as CommonAbstractRequest;
 
 abstract class AbstractRequest extends CommonAbstractRequest
 {
+
+//    public function __construct(ClientInterface $httpClient, HttpRequest $httpRequest)
+//    {
+//        parent::__construct($httpClient, $httpRequest);
+//
+//        $this->httpRequest->setAuth($this->getApiAuthToken());
+//        $this->httpRequest->setHeader('Content-type', 'application/json');
+//        $this->httpRequest->addHeader('Accept', 'application/json');
+//    }
+
     /**
      * Get live- or testURL.
      */
