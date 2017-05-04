@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Twispay driver for the Omnipay payment processing library",
     "keywords": ["twispay", "gateway", "merchant", "omnipay", "pay", "payment"],
-    "homepage": "https://github.com/prmrgt/omnipay-twispay",
+    "homepage": "https://github.com/potpotpot/omnipay-twispay",
     "authors": [
         {
             "name": "ProEmergotech Kft",
