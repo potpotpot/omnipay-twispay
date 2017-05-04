@@ -2,6 +2,7 @@
 
 namespace Omnipay\Twispay;
 
+use Guzzle\Http\Client;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Twispay\Message\AuthorizeRequest;
