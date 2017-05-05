@@ -17,7 +17,7 @@ abstract class AbstractRequest extends CommonAbstractRequest
     public function get($uri = null, $headers = null, $options = [])
     {
         $request = $this->httpClient->get(
-            $this->getApiUrl() . $uri,
+            $this->getParameter('apiUrl') . $uri,
             $headers,
             $options
         );
@@ -26,18 +26,6 @@ abstract class AbstractRequest extends CommonAbstractRequest
         $request->addHeader('Accept', 'application/json');
 
         return $request;
-    }
-
-    /**
-     * Get live- or testURL.
-     */
-    public function getApiUrl()
-    {
-        if ($this->getTestMode()) {
-            return 'https://api-stage.twispay.com';
-        } else {
-            return 'https://https://api.twispay.com';
-        }
     }
 
     public function getApiAuthToken()
@@ -53,6 +41,16 @@ abstract class AbstractRequest extends CommonAbstractRequest
     public function setApiKey($value)
     {
         return $this->setParameter('apiKey', $value);
+    }
+
+    public function getApiUrl()
+    {
+        return $this->getParameter('apiUrl');
+    }
+
+    public function setApiUrl($value)
+    {
+        return $this->setParameter('apiUrl', $value);
     }
 
     public function getSiteId()

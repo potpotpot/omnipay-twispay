@@ -46,6 +46,16 @@ class Gateway extends AbstractGateway
     private $siteId = 73;
 
     /**
+     * @var string
+     */
+    private $testApiHost = 'https://api-stage.twispay.com';
+
+    /**
+     * @var string
+     */
+    private $prodApiHost = 'https://api.twispay.com';
+
+    /**
      * @return string
      */
     public function getName()
@@ -66,33 +76,14 @@ class Gateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return [
-            'apiKey' => $this->getApiKey(),
+            'testMode' => true, // Must be the 1st in the list!
             'siteId' => $this->getSiteId(),
-            'testMode' => $this->isTestMode(),
+            'apiKey' => $this->getApiKey(),
+            'apiUrl' => $this->getApiUrl(),
         ];
     }
 
     // ------------ Getter'n'Setters ------------ //
-
-    /**
-     *
-     * @return string
-     */
-    public function getApiKey()
-    {
-        return $this->parameters->get('apiKey', $this->apiKey);
-    }
-
-    /**
-     *
-     * @param string $value
-     *
-     * @return $this
-     */
-    public function setApiKey($value)
-    {
-        return $this->setParameter('apiKey', $value);
-    }
 
     /**
      *
@@ -115,12 +106,40 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * @return bool
+     *
+     * @return string
      */
-    public function isTestMode()
+    public function getApiKey()
     {
-        // TODO must decide based on environment [andor]
-        return true;
+        return $this->parameters->get('apiKey', $this->apiKey);
+    }
+
+    /**
+     *
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function setApiKey($value)
+    {
+        return $this->setParameter('apiKey', $value);
+    }
+
+    /**
+     * Get live- or testURL.
+     */
+    public function getApiUrl()
+    {
+        $defaultUrl = $this->getTestMode()
+            ? $this->testApiHost
+            : $this->prodApiHost;
+
+        return $this->parameters->get('apiUrl', $defaultUrl);
+    }
+
+    public function setApiUrl($value)
+    {
+        return $this->setParameter('apiUrl', $value);
     }
 
     /**
