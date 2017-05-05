@@ -7,6 +7,7 @@ use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Twispay\Message\AuthorizeRequest;
 use Omnipay\Twispay\Message\FetchOrdersRequest;
 use Omnipay\Twispay\Message\FetchTransactionsRequest;
+use Omnipay\Twispay\Message\GetTransactionRequest;
 
 /**
  * Twispay Gateway
@@ -71,9 +72,17 @@ class Gateway extends AbstractGateway
         return $this->createRequest(FetchOrdersRequest::class, $this->getDefaultParameters());
     }
 
-    public function fetchTransactions(): RequestInterface
+    public function fetchTransactions(array $parameters = []): RequestInterface
     {
-        return $this->createRequest(FetchTransactionsRequest::class, $this->getDefaultParameters());
+        return $this->createRequest(FetchTransactionsRequest::class, array_merge($this->getDefaultParameters(), $parameters));
+    }
+
+    public function getTransaction($id): RequestInterface
+    {
+        $parameters = [
+            'id' => $id,
+        ];
+        return $this->createRequest(GetTransactionRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
 
     // ------------ Getter'n'Setters ------------ //

@@ -6,6 +6,7 @@ use Guzzle\Http\Exception\ClientErrorResponseException;
 use Omnipay\Tests\GatewayTestCase;
 use Omnipay\Twispay\Message\FetchOrdersResponse;
 use Omnipay\Twispay\Message\FetchTransactionsResponse;
+use Omnipay\Twispay\Message\GetTransactionResponse;
 
 /**
  * Class GatewayTest
@@ -80,6 +81,23 @@ class GatewayTest extends GatewayTestCase
         // Set an invalid api key
         $this->gateway->setApiKey('XXXXXX');
         $this->gateway->fetchTransactions()->send();
+    }
+
+    /**
+     *
+     */
+    public function testGetTransactionFailure()
+    {
+        // Set an invalid api key
+        $response = $this->gateway->getTransaction(rand(1,10))->send();
+        $this->assertInstanceOf(GetTransactionResponse::class, $response);
+        $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+
+//print_r([__METHOD__ . __LINE__, $response->getCode(), $response->getMessage()]); exit;
+
+        $this->assertSame('Not Found', $response->getMessage());
+        $this->assertSame(404, $response->getCode());
     }
 
 
