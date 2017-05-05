@@ -2,21 +2,31 @@
 
 namespace Omnipay\Twispay\Message;
 
-use Guzzle\Http\ClientInterface;
 use Omnipay\Common\Message\AbstractRequest as CommonAbstractRequest;
-use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractRequest extends CommonAbstractRequest
 {
-//
-//    public function __construct(ClientInterface $httpClient, Request $httpRequest)
-//    {
-//
-////        $httpRequest->setAuth($this->getApiAuthToken());
-////        $httpRequest->setHeader('Content-type', 'application/json');
-////        $httpRequest->addHeader('Accept', 'application/json');
-//        parent::__construct($httpClient, $httpRequest);
-//    }
+    /**
+     * @param null $uri
+     * @param null $headers
+     * @param array $options
+     *
+     * @return \Guzzle\Http\Message\RequestInterface
+     * @throws \Guzzle\Http\Exception\RequestException
+     */
+    public function get($uri = null, $headers = null, $options = [])
+    {
+        $request = $this->httpClient->get(
+            $this->getUrl() . $uri,
+            $headers,
+            $options
+        );
+        $request->setAuth($this->getApiAuthToken());
+        $request->setHeader('Content-type', 'application/json');
+        $request->addHeader('Accept', 'application/json');
+
+        return $request;
+    }
 
     /**
      * Get live- or testURL.

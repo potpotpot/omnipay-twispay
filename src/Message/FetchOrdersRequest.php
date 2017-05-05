@@ -2,8 +2,6 @@
 
 namespace Omnipay\Twispay\Message;
 
-use Omnipay\Common\Message\ResponseInterface;
-
 class FetchOrdersRequest extends AbstractRequest
 {
     /**
@@ -23,12 +21,7 @@ class FetchOrdersRequest extends AbstractRequest
 
     public function sendData($data)
     {
-        $request = $this->httpClient->get($this->getUrl() . $this->endpoint);
-        $request->setAuth($this->getApiAuthToken());
-        $request->setHeader('Content-type', 'application/json');
-        $request->addHeader('Accept', 'application/json');
-
-        $httpResponse = $request->send();
+        $httpResponse = $this->get($this->endpoint)->send();
 
         return $this->response = new FetchOrdersResponse($this, $httpResponse->json());
     }
