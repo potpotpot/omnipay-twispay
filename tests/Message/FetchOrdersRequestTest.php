@@ -5,7 +5,7 @@ namespace Omnipay\Twispay\Message;
 use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Tests\TestCase;
 
-class AuthorizeRequestTest extends TestCase
+class FetchOrdersRequestTest extends TestCase
 {
     /**
      * @var RequestInterface
@@ -14,16 +14,13 @@ class AuthorizeRequestTest extends TestCase
 
     public function setUp()
     {
-        $this->request = new AuthorizeRequest($this->getHttpClient(), $this->getHttpRequest());
-        $this->request->initialize([
-            'amount' => '10.00',
-            'card' => $this->getValidCard(),
-        ]);
+        $this->request = new FetchOrdersRequest($this->getHttpClient(), $this->getHttpRequest());
+        $this->request->initialize([]);
     }
 
     public function testGetData()
     {
         $data = $this->request->getData();
-        $this->assertSame('10.00', $data['amount']);
+        $this->assertSame([], $data);
     }
 }

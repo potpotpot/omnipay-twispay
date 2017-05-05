@@ -16,7 +16,6 @@ class FetchOrdersResponse extends AbstractResponse
 
     public function getMessage()
     {
-        // TODO
         return $this->data['message'];
     }
 }

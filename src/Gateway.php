@@ -57,6 +57,7 @@ use Omnipay\Twispay\Message\FetchOrdersRequest;
  * }
  * </code>
  *
+ * @method \Omnipay\Common\Message\RequestInterface authorize(array $parameters = [])
  * @method \Omnipay\Common\Message\RequestInterface purchase(array $options = [])
  * @method \Omnipay\Common\Message\RequestInterface completeAuthorize(array $options = [])
  * @method \Omnipay\Common\Message\RequestInterface capture(array $options = [])
@@ -105,18 +106,6 @@ class Gateway extends AbstractGateway
     public function fetchOrders(): RequestInterface
     {
         return $this->createRequest(FetchOrdersRequest::class, $this->getDefaultParameters());
-    }
-
-    /**
-     * Create an authorize request.
-     *
-     * @param array $parameters
-     *
-     * @return RequestInterface
-     */
-    public function authorize(array $parameters = []): RequestInterface
-    {
-        return $this->createRequest(AuthorizeRequest::class, $parameters);
     }
 
     // ------------ Getter'n'Setters ------------ //

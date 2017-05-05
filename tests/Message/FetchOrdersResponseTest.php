@@ -4,13 +4,13 @@ namespace Omnipay\Twispay\Message;
 
 use Omnipay\Tests\TestCase;
 
-class AuthorizeResponseTest extends TestCase
+class FetchOrdersResponseTest extends TestCase
 {
     public function testSuccess()
     {
-        $response = new AuthorizeResponse(
+        $response = new FetchOrdersResponse(
             $this->getMockRequest(),
-            ['success' => 1, 'message' => 'Success']
+            ['code' => 200, 'message' => 'Success']
         );
 
         $this->assertTrue($response->isSuccessful());
@@ -20,7 +20,7 @@ class AuthorizeResponseTest extends TestCase
 
     public function testFailure()
     {
-        $response = new AuthorizeResponse(
+        $response = new FetchOrdersResponse(
             $this->getMockRequest(),
             ['success' => 0, 'message' => 'Failure']
         );
