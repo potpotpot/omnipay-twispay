@@ -6,6 +6,7 @@ use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Twispay\Message\AuthorizeRequest;
 use Omnipay\Twispay\Message\FetchOrdersRequest;
+use Omnipay\Twispay\Message\FetchTransactionsRequest;
 
 /**
  * Twispay Gateway
@@ -63,12 +64,19 @@ class Gateway extends AbstractGateway
         return 'Twispay';
     }
 
+    // ------------ Requests ------------ //
+
     public function fetchOrders(): RequestInterface
     {
         return $this->createRequest(FetchOrdersRequest::class, $this->getDefaultParameters());
     }
 
-    // ------------ Requests ------------ //
+    public function fetchTransactions(): RequestInterface
+    {
+        return $this->createRequest(FetchTransactionsRequest::class, $this->getDefaultParameters());
+    }
+
+    // ------------ Getter'n'Setters ------------ //
 
     /**
      * {@inheritdoc}
@@ -82,8 +90,6 @@ class Gateway extends AbstractGateway
             'apiUrl' => $this->getApiUrl(),
         ];
     }
-
-    // ------------ Getter'n'Setters ------------ //
 
     /**
      *

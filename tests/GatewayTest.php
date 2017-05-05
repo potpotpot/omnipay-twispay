@@ -4,6 +4,8 @@ namespace Omnipay\Twispay;
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Omnipay\Tests\GatewayTestCase;
+use Omnipay\Twispay\Message\FetchOrdersResponse;
+use Omnipay\Twispay\Message\FetchTransactionsResponse;
 
 /**
  * Class GatewayTest
@@ -39,7 +41,7 @@ class GatewayTest extends GatewayTestCase
     {
         $response = $this->gateway->fetchOrders()->send();
 
-        $this->assertInstanceOf('\Omnipay\Twispay\Message\FetchOrdersResponse', $response);
+        $this->assertInstanceOf(FetchOrdersResponse::class, $response);
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Success', $response->getMessage());
@@ -53,6 +55,31 @@ class GatewayTest extends GatewayTestCase
         // Set an invalid api key
         $this->gateway->setApiKey('XXXXXX');
         $this->gateway->fetchOrders()->send();
+    }
+
+
+    /**
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     */
+    public function testFetchTransactionsSuccess()
+    {
+        $response = $this->gateway->fetchTransactions()->send();
+
+        $this->assertInstanceOf(FetchTransactionsResponse::class, $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Success', $response->getMessage());
+    }
+
+    /**
+     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
+     */
+    public function testFetchTransactionsFailure()
+    {
+        // Set an invalid api key
+        $this->gateway->setApiKey('XXXXXX');
+        $this->gateway->fetchTransactions()->send();
     }
 
 
