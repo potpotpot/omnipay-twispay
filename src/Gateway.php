@@ -95,9 +95,6 @@ class Gateway extends AbstractGateway
         return [
             'apiKey' => $this->getApiKey(),
             'siteId' => $this->getSiteId(),
-            'notifyUrl' => '',
-            'returnUrl' => '',
-            'cancelUrl' => '',
             'testMode' => true,
         ];
     }
@@ -150,7 +147,7 @@ class Gateway extends AbstractGateway
      */
     public function getSiteId()
     {
-        return $this->getParameter('siteId');
+        return $this->parameters->get('siteId', $this->siteId);
     }
 
     /**
@@ -164,65 +161,6 @@ class Gateway extends AbstractGateway
         return $this->setParameter('siteId', $value);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getNotifyUrl()
-    {
-        return $this->getParameter('notifyUrl');
-    }
-
-    /**
-     *
-     * @param string $value
-     *
-     * @return $this
-     */
-    public function setNotifyUrl($value)
-    {
-        return $this->setParameter('notifyUrl', $value);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getReturnUrl()
-    {
-        return $this->getParameter('returnUrl');
-    }
-
-    /**
-     *
-     * @param string $value
-     *
-     * @return $this
-     */
-    public function setReturnUrl($value)
-    {
-        return $this->setParameter('returnUrl', $value);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getCancelUrl()
-    {
-        return $this->getParameter('cancelUrl');
-    }
-
-    /**
-     *
-     * @param string $value
-     *
-     * @return $this
-     */
-    public function setCancelUrl($value)
-    {
-        return $this->setParameter('cancelUrl', $value);
-    }
 
     /**
      * @param $name
