@@ -2,7 +2,6 @@
 
 namespace Omnipay\Twispay;
 
-use Guzzle\Http\Client;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Twispay\Message\AuthorizeRequest;
@@ -11,51 +10,17 @@ use Omnipay\Twispay\Message\FetchOrdersRequest;
 /**
  * Twispay Gateway
  *
- * This gateway is useful for testing. It simply authorizes any payment made using a valid
- * credit card number and expiry.
+ * To test different responses based on the 'amount' used
  *
- * Any card number which passes the Luhn algorithm and ends in an even number is authorized,
- * for example: 4242424242424242
+ * 0.02 = Insufficient funds
+ * 0.03 = Bank time out
+ * 0.04 = Pending at Bank
+ * 0.05 = Declined by Bank
+ * 0.06 = Rejected by Processor
+ * 0.07 = Malformed response from Processor
+ * 0.08 = Timeout
  *
- * Any card number which passes the Luhn algorithm and ends in an odd number is declined,
- * for example: 4111111111111111
- *
- * ### Example
- *
- * <code>
- * // Create a gateway for the Twispay Gateway
- * // (routes to GatewayFactory::create)
- * $gateway = Omnipay::create('Twispay');
- *
- * // Initialise the gateway
- * $gateway->initialize(array(
- *     'testMode' => true, // Doesn't really matter what you use here.
- * ));
- *
- * // Create a credit card object
- * // This card can be used for testing.
- * $card = new CreditCard(array(
- *             'firstName'    => 'Example',
- *             'lastName'     => 'Customer',
- *             'number'       => '4242424242424242',
- *             'expiryMonth'  => '01',
- *             'expiryYear'   => '2020',
- *             'cvv'          => '123',
- * ));
- *
- * // Do a purchase transaction on the gateway
- * $transaction = $gateway->purchase(array(
- *     'amount'                   => '10.00',
- *     'currency'                 => 'AUD',
- *     'card'                     => $card,
- * ));
- * $response = $transaction->send();
- * if ($response->isSuccessful()) {
- *     echo "Purchase transaction was successful!\n";
- *     $sale_id = $response->getTransactionReference();
- *     echo "Transaction reference = " . $sale_id . "\n";
- * }
- * </code>
+ * You can use 4111111111111111 as a card number, any cvv and any exp date in the future.
  *
  * @method \Omnipay\Common\Message\RequestInterface authorize(array $parameters = [])
  * @method \Omnipay\Common\Message\RequestInterface purchase(array $options = [])
@@ -88,6 +53,13 @@ class Gateway extends AbstractGateway
         return 'Twispay';
     }
 
+    public function fetchOrders(): RequestInterface
+    {
+        return $this->createRequest(FetchOrdersRequest::class, $this->getDefaultParameters());
+    }
+
+    // ------------ Requests ------------ //
+
     /**
      * {@inheritdoc}
      */
@@ -96,16 +68,8 @@ class Gateway extends AbstractGateway
         return [
             'apiKey' => $this->getApiKey(),
             'siteId' => $this->getSiteId(),
-            'testMode' => true,
+            'testMode' => $this->isTestMode(),
         ];
-    }
-
-    // ------------ Requests ------------ //
-
-
-    public function fetchOrders(): RequestInterface
-    {
-        return $this->createRequest(FetchOrdersRequest::class, $this->getDefaultParameters());
     }
 
     // ------------ Getter'n'Setters ------------ //
@@ -150,6 +114,14 @@ class Gateway extends AbstractGateway
         return $this->setParameter('siteId', $value);
     }
 
+    /**
+     * @return bool
+     */
+    public function isTestMode()
+    {
+        // TODO must decide based on environment [andor]
+        return true;
+    }
 
     /**
      * @param $name
