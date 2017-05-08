@@ -2,6 +2,7 @@
 
 namespace Omnipay\Twispay\Message;
 
+use Guzzle\Http\Client;
 use Omnipay\Common\Message\AbstractRequest as CommonAbstractRequest;
 
 abstract class AbstractRequest extends CommonAbstractRequest
@@ -16,7 +17,9 @@ abstract class AbstractRequest extends CommonAbstractRequest
      */
     public function get($uri = null, $headers = null, $options = [])
     {
-        $request = $this->httpClient->get(
+        /** @var Client $client */
+        $client = $this->httpClient;
+        $request = $client->get(
             $this->getParameter('apiUrl') . $uri,
             $headers,
             $options

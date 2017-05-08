@@ -2,8 +2,8 @@
 
 namespace Omnipay\Twispay;
 
-use Guzzle\Http\Exception\ClientErrorResponseException;
 use Omnipay\Tests\GatewayTestCase;
+use Omnipay\Twispay\Message\FetchCustomersResponse;
 use Omnipay\Twispay\Message\FetchOrdersResponse;
 use Omnipay\Twispay\Message\FetchTransactionsResponse;
 use Omnipay\Twispay\Message\GetTransactionResponse;
@@ -58,7 +58,6 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->fetchOrders()->send();
     }
 
-
     /**
      * @throws \PHPUnit_Framework_AssertionFailedError
      * @throws \PHPUnit_Framework_Exception
@@ -84,12 +83,43 @@ class GatewayTest extends GatewayTestCase
     }
 
     /**
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     */
+    public function testFetchCustomersSuccess()
+    {
+        $filters = [
+            'identifier' => 'tittelandor',
+            'email' => 'andor.tittel@proemergotech.com',
+        ];
+        $filters = [];
+        $response = $this->gateway->fetchCustomers($filters)->send();
+
+        $this->assertInstanceOf(FetchCustomersResponse::class, $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Success', $response->getMessage());
+
+//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+    }
+
+    /**
+     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
+     */
+    public function testFetchCustomersFailure()
+    {
+        // Set an invalid api key
+        $this->gateway->setApiKey('XXXXXX');
+        $this->gateway->fetchTransactions()->send();
+    }
+
+    /**
      *
      */
     public function testGetTransactionFailure()
     {
         // Set an invalid api key
-        $response = $this->gateway->getTransaction(rand(1,10))->send();
+        $response = $this->gateway->getTransaction(rand(1, 10))->send();
         $this->assertInstanceOf(GetTransactionResponse::class, $response);
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
@@ -97,7 +127,6 @@ class GatewayTest extends GatewayTestCase
         $this->assertSame('Not Found', $response->getMessage());
         $this->assertSame(404, $response->getCode());
     }
-
 
     public function testFetchTransactionSuccess()
     {
