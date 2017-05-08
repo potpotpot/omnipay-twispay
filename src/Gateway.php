@@ -8,6 +8,7 @@ use Omnipay\Twispay\Message\AuthorizeRequest;
 use Omnipay\Twispay\Message\FetchOrdersRequest;
 use Omnipay\Twispay\Message\FetchTransactionsRequest;
 use Omnipay\Twispay\Message\GetTransactionRequest;
+use Omnipay\Twispay\Message\PurchaseRequest;
 
 /**
  * Twispay Gateway
@@ -25,7 +26,6 @@ use Omnipay\Twispay\Message\GetTransactionRequest;
  * You can use 4111111111111111 as a card number, any cvv and any exp date in the future.
  *
  * @method \Omnipay\Common\Message\RequestInterface authorize(array $parameters = [])
- * @method \Omnipay\Common\Message\RequestInterface purchase(array $options = [])
  * @method \Omnipay\Common\Message\RequestInterface completeAuthorize(array $options = [])
  * @method \Omnipay\Common\Message\RequestInterface capture(array $options = [])
  * @method \Omnipay\Common\Message\RequestInterface completePurchase(array $options = [])
@@ -66,6 +66,11 @@ class Gateway extends AbstractGateway
     }
 
     // ------------ Requests ------------ //
+
+    public function purchase(array $parameters = []): RequestInterface
+    {
+        return $this->createRequest(PurchaseRequest::class, array_merge($this->getDefaultParameters(), $parameters));
+    }
 
     public function fetchOrders(): RequestInterface
     {

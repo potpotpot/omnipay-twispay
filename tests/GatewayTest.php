@@ -94,8 +94,6 @@ class GatewayTest extends GatewayTestCase
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
 
-//print_r([__METHOD__ . __LINE__, $response->getCode(), $response->getMessage()]); exit;
-
         $this->assertSame('Not Found', $response->getMessage());
         $this->assertSame(404, $response->getCode());
     }
@@ -103,6 +101,7 @@ class GatewayTest extends GatewayTestCase
 
     public function testFetchTransactionSuccess()
     {
+        /** @var GetTransactionResponse $response */
         $response = $this->gateway->getTransaction(16177)->send();
         $this->assertInstanceOf(GetTransactionResponse::class, $response);
         $this->assertTrue($response->isSuccessful());
