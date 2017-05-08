@@ -23,4 +23,20 @@ class GetTransactionResponse extends AbstractResponse
     {
         return $this->data['code'];
     }
+
+    /**
+     * @return array
+     */
+    public function getTransactionData()
+    {
+        return $this->data['data'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getTransactionId()
+    {
+        return $this->getTransactionData()['id'];
+    }
 }

@@ -101,6 +101,18 @@ class GatewayTest extends GatewayTestCase
     }
 
 
+    public function testFetchTransactionSuccess()
+    {
+        $response = $this->gateway->getTransaction(16177)->send();
+        $this->assertInstanceOf(GetTransactionResponse::class, $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Success', $response->getMessage());
+
+        $this->assertTrue(is_array($response->getTransactionData()));
+        $this->assertEquals(16177, $response->getTransactionId());
+    }
+
     //    /**
     //     * @throws \PHPUnit_Framework_AssertionFailedError
     //     * @throws \PHPUnit_Framework_Exception
