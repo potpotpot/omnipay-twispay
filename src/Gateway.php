@@ -10,6 +10,7 @@ use Omnipay\Twispay\Message\FetchCardsRequest;
 use Omnipay\Twispay\Message\FetchCustomersRequest;
 use Omnipay\Twispay\Message\FetchOrdersRequest;
 use Omnipay\Twispay\Message\FetchTransactionsRequest;
+use Omnipay\Twispay\Message\GetCardRequest;
 use Omnipay\Twispay\Message\GetCustomerRequest;
 use Omnipay\Twispay\Message\GetTransactionRequest;
 use Omnipay\Twispay\Message\PurchaseRequest;
@@ -87,16 +88,12 @@ class Gateway extends AbstractGateway
         return $this->createRequest(FetchCardsRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
 
-    //    public function getCard($id): RequestInterface
-    //    {
-    //        // TODO megszurni az input paramokat hogy csak olyanokat engedjuk at amikkel dolgozni is lehet [andor]
-    //        $parameters = [
-    //            'id' => $id,
-    //        ];
-    //
-    //        return $this->createRequest(GetCustomerRequest::class, array_merge($this->getDefaultParameters(), $parameters));
-    //    }
-    //
+    public function getCard(array $parameters = []): RequestInterface
+    {
+        // TODO megszurni az input paramokat hogy csak olyanokat engedjuk at amikkel dolgozni is lehet [andor]
+        return $this->createRequest(GetCardRequest::class, array_merge($this->getDefaultParameters(), $parameters));
+    }
+
     //    public function deleteCard($id): RequestInterface
     //    {
     //        // TODO megszurni az input paramokat hogy csak olyanokat engedjuk at amikkel dolgozni is lehet [andor]

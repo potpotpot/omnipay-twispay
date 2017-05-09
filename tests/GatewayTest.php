@@ -8,6 +8,7 @@ use Omnipay\Twispay\Message\FetchCardsResponse;
 use Omnipay\Twispay\Message\FetchCustomersResponse;
 use Omnipay\Twispay\Message\FetchOrdersResponse;
 use Omnipay\Twispay\Message\FetchTransactionsResponse;
+use Omnipay\Twispay\Message\GetCardResponse;
 use Omnipay\Twispay\Message\GetCustomerResponse;
 use Omnipay\Twispay\Message\GetTransactionResponse;
 
@@ -227,6 +228,41 @@ class GatewayTest extends GatewayTestCase
 
 //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
+
+    public function testGetCardFailure()
+    {
+        $response = $this->gateway->getCard([
+            'id' => rand(1, 10),
+        ])->send();
+
+        $this->assertInstanceOf(GetCardResponse::class, $response);
+        $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+
+        $this->assertSame('Bad Request', $response->getMessage());
+        $this->assertEquals(400, $response->getCode());
+        $this->assertEquals(1620, $response->getErrors()[0]['code']);
+//        print_r([__METHOD__ . __LINE__, $response->getErrors()]); exit;
+    }
+
+    public function testGetCardSuccess()
+    {
+        $response = $this->gateway->getCard([
+            'id' => 7744,
+            'customerId' => 3719,
+        ])->send();
+
+        $this->assertInstanceOf(GetCardResponse::class, $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Success', $response->getMessage());
+
+        $this->assertNotEmpty($response->getCardData());
+        $this->assertEquals(3719, $response->getCustomerId());
+        $this->assertEquals(7744, $response->getCardId());
+//        print_r([__METHOD__ . __LINE__, $response->getCardData()]); exit;
+    }
+
 
     //    /**
     //     * @throws \PHPUnit_Framework_AssertionFailedError
