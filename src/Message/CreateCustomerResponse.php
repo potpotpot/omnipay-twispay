@@ -28,4 +28,9 @@ class CreateCustomerResponse extends AbstractResponse
     {
         return $this->data['error'];
     }
+
+    public function getCustomerId()
+    {
+        return $this->data['data']['id'];
+    }
 }

@@ -127,8 +127,9 @@ class GatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Created', $response->getMessage());
+        $this->assertNotEmpty($response->getCustomerId());
 
-        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     public function testCreateCustomerFailureMissingMandatoryFields()
