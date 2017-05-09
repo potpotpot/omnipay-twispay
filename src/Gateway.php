@@ -5,6 +5,7 @@ namespace Omnipay\Twispay;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Twispay\Message\AuthorizeRequest;
+use Omnipay\Twispay\Message\CreateCustomerRequest;
 use Omnipay\Twispay\Message\FetchCustomersRequest;
 use Omnipay\Twispay\Message\FetchOrdersRequest;
 use Omnipay\Twispay\Message\FetchTransactionsRequest;
@@ -82,6 +83,12 @@ class Gateway extends AbstractGateway
     {
         // TODO megszurni az input paramokat hogy csak olyanokat engedjuk at amikkel dolgozni is lehet [andor]
         return $this->createRequest(FetchCustomersRequest::class, array_merge($this->getDefaultParameters(), $parameters));
+    }
+
+    public function createCustomer(array $parameters = []): RequestInterface
+    {
+        // TODO megszurni az input paramokat hogy csak olyanokat engedjuk at amikkel dolgozni is lehet [andor]
+        return $this->createRequest(CreateCustomerRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
 
     public function fetchTransactions(array $parameters = []): RequestInterface

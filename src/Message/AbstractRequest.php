@@ -31,23 +31,16 @@ abstract class AbstractRequest extends CommonAbstractRequest
         return $request;
     }
 
-    /**
-     * @param null $uri
-     * @param null $headers
-     * @param array $options
-     *
-     * @return \Guzzle\Http\Message\EntityEnclosingRequestInterface
-     * @throws \Guzzle\Http\Exception\RequestException
-     */
-    public function post($uri = null, $headers = null, $options = [])
+    public function post($uri = null, $headers = null, array $postBody, array $options = [])
     {
         $request = $this->httpClient->post(
             $this->getParameter('apiUrl') . $uri,
             $headers,
+            $postBody,
             $options
         );
         $request->setAuth($this->getApiAuthToken());
-        $request->setHeader('Content-type', 'application/json');
+        $request->setHeader('Content-type', 'application/x-www-form-urlencoded');
         $request->addHeader('Accept', 'application/json');
 
         return $request;

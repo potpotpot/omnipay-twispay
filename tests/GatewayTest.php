@@ -3,6 +3,7 @@
 namespace Omnipay\Twispay;
 
 use Omnipay\Tests\GatewayTestCase;
+use Omnipay\Twispay\Message\CreateCustomerResponse;
 use Omnipay\Twispay\Message\FetchCustomersResponse;
 use Omnipay\Twispay\Message\FetchOrdersResponse;
 use Omnipay\Twispay\Message\FetchTransactionsResponse;
@@ -92,7 +93,7 @@ class GatewayTest extends GatewayTestCase
             'identifier' => 'tittelandor',
             'email' => 'andor.tittel@proemergotech.com',
         ];
-        $filters = [];
+//        $filters = [];
         $response = $this->gateway->fetchCustomers($filters)->send();
 
         $this->assertInstanceOf(FetchCustomersResponse::class, $response);
@@ -110,7 +111,41 @@ class GatewayTest extends GatewayTestCase
     {
         // Set an invalid api key
         $this->gateway->setApiKey('XXXXXX');
-        $this->gateway->fetchTransactions()->send();
+        $this->gateway->fetchCustomers()->send();
+    }
+
+    public function testCreateCustomerSuccess()
+    {
+        $rand = 'test-' . rand(10000, PHP_INT_MAX/4);
+        $customerData = [
+            'identifier' => $rand,
+            'email' => $rand  .'@proemergotech.com',
+        ];
+        $response = $this->gateway->createCustomer($customerData)->send();
+
+        $this->assertInstanceOf(CreateCustomerResponse::class, $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Created', $response->getMessage());
+
+        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+    }
+
+    public function testCreateCustomerFailureMissingMandatoryFields()
+    {
+        $customerData = [];
+        $response = $this->gateway->createCustomer($customerData)->send();
+
+        $this->assertInstanceOf(CreateCustomerResponse::class, $response);
+        $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Bad Request', $response->getMessage());
+        $this->assertSame(400, $response->getCode());
+        $this->assertNotEmpty($response->getErrors());
+        foreach ($response->getErrors() as $error) {
+            $this->assertTrue(in_array($error['code'], [1620, 1646]));
+        }
+//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     /**
