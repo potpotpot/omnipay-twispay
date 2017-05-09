@@ -10,6 +10,7 @@ use Omnipay\Twispay\Message\FetchOrdersResponse;
 use Omnipay\Twispay\Message\FetchTransactionsResponse;
 use Omnipay\Twispay\Message\GetCardResponse;
 use Omnipay\Twispay\Message\GetCustomerResponse;
+use Omnipay\Twispay\Message\GetOrderResponse;
 use Omnipay\Twispay\Message\GetTransactionResponse;
 
 /**
@@ -68,6 +69,35 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->setApiKey('XXXXXX');
         $this->gateway->fetchOrders()->send();
     }
+
+    public function testGetOrderNotFound()
+    {
+        $response = $this->gateway->getOrder(rand(PHP_INT_MAX/2, PHP_INT_MAX))->send();
+
+        $this->assertInstanceOf(GetOrderResponse::class, $response);
+        $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+
+        $this->assertSame('Not Found', $response->getMessage());
+        $this->assertEquals(404, $response->getCode());
+//        print_r([__METHOD__ . __LINE__, $response->getErrors()]); exit;
+    }
+
+    public function testGetOrderSuccess()
+    {
+        $response = $this->gateway->getOrder(10075)->send();
+
+        $this->assertInstanceOf(GetOrderResponse::class, $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Success', $response->getMessage());
+
+        $this->assertNotEmpty($response->getOrderData());
+        $this->assertEquals(10075, $response->getOrderId());
+//        print_r([__METHOD__ . __LINE__, $response->getOrderData()]); exit;
+    }
+
+
 
     /**
      * @throws \PHPUnit_Framework_AssertionFailedError
