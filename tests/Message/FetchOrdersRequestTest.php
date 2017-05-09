@@ -8,7 +8,7 @@ use Omnipay\Tests\TestCase;
 class FetchOrdersRequestTest extends TestCase
 {
     /**
-     * @var RequestInterface
+     * @var FetchOrdersRequest
      */
     protected $request;
 
@@ -21,6 +21,10 @@ class FetchOrdersRequestTest extends TestCase
     public function testGetData()
     {
         $data = $this->request->getData();
-        $this->assertSame([], $data);
+        $this->assertSame([
+            'siteId' => null,
+            'externalOrderId' => null,
+            'customerId' => null,
+        ], $data);
     }
 }
