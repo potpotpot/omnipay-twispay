@@ -60,9 +60,6 @@ class GatewayTest extends GatewayTestCase
 //        print_r([__METHOD__ . __LINE__, $response->getData()]);exit;
     }
 
-    /**
-     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
-     */
     public function testFetchOrdersFailure()
     {
         // Set an invalid api key
