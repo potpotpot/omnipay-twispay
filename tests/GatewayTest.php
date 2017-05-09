@@ -44,12 +44,19 @@ class GatewayTest extends GatewayTestCase
      */
     public function testFetchOrdersSuccess()
     {
-        $response = $this->gateway->fetchOrders()->send();
+        $parameters = [
+            'siteId' => [73],
+//            'externalOrderId' => 'sssss',
+//            'customerId' => 3719,
+        ];
+        $response = $this->gateway->fetchOrders($parameters)->send();
 
         $this->assertInstanceOf(FetchOrdersResponse::class, $response);
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Success', $response->getMessage());
+        $this->assertNotEmpty($response->getData());
+//        print_r([__METHOD__ . __LINE__, $response->getData()]);exit;
     }
 
     /**
@@ -213,7 +220,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Success', $response->getMessage());
-//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     public function testFetchCardsFailureEmptyFilters()
@@ -226,7 +233,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertSame('Bad Request', $response->getMessage());
         $this->assertSame(1620, $response->getErrors()[0]['code']);
 
-//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     public function testGetCardFailure()
@@ -242,7 +249,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertSame('Bad Request', $response->getMessage());
         $this->assertEquals(400, $response->getCode());
         $this->assertEquals(1620, $response->getErrors()[0]['code']);
-//        print_r([__METHOD__ . __LINE__, $response->getErrors()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getErrors()]); exit;
     }
 
     public function testGetCardSuccess()
@@ -260,7 +267,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertNotEmpty($response->getCardData());
         $this->assertEquals(3719, $response->getCustomerId());
         $this->assertEquals(7744, $response->getCardId());
-//        print_r([__METHOD__ . __LINE__, $response->getCardData()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getCardData()]); exit;
     }
 
 

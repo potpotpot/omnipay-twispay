@@ -98,9 +98,9 @@ class Gateway extends AbstractGateway
     // ------------ ORDERS   ------------
     // ----------------------------------
 
-    public function fetchOrders(): RequestInterface
+    public function fetchOrders(array $parameters = []): RequestInterface
     {
-        return $this->createRequest(FetchOrdersRequest::class, $this->getDefaultParameters());
+        return $this->createRequest(FetchOrdersRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
 
     // ----------------------------------
