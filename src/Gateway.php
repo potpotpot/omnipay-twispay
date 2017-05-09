@@ -107,6 +107,7 @@ class Gateway extends AbstractGateway
         $parameters = [
             'id' => $id,
         ];
+
         return $this->createRequest(GetCustomerRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
 
@@ -124,6 +125,7 @@ class Gateway extends AbstractGateway
         $parameters = [
             'id' => $id,
         ];
+
         return $this->createRequest(GetTransactionRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
 
