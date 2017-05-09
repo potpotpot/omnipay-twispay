@@ -94,17 +94,6 @@ class Gateway extends AbstractGateway
         return $this->createRequest(GetCardRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
 
-    //    public function deleteCard($id): RequestInterface
-    //    {
-    //        // TODO megszurni az input paramokat hogy csak olyanokat engedjuk at amikkel dolgozni is lehet [andor]
-    //        $parameters = [
-    //            'id' => $id,
-    //        ];
-    //
-    //        return $this->createRequest(CreateCustomerRequest::class, array_merge($this->getDefaultParameters(), $parameters));
-    //    }
-    //
-
     // ----------------------------------
     // ------------ ORDERS   ------------
     // ----------------------------------
