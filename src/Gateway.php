@@ -6,6 +6,7 @@ use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Twispay\Message\AuthorizeRequest;
 use Omnipay\Twispay\Message\CreateCustomerRequest;
+use Omnipay\Twispay\Message\CreateOrderRequest;
 use Omnipay\Twispay\Message\FetchCardsRequest;
 use Omnipay\Twispay\Message\FetchCustomersRequest;
 use Omnipay\Twispay\Message\FetchOrdersRequest;
@@ -113,6 +114,12 @@ class Gateway extends AbstractGateway
         ];
 
         return $this->createRequest(GetOrderRequest::class, array_merge($this->getDefaultParameters(), $parameters));
+    }
+
+    public function createOrder(array $parameters = []): RequestInterface
+    {
+        // TODO megszurni az input paramokat hogy csak olyanokat engedjuk at amikkel dolgozni is lehet [andor]
+        return $this->createRequest(CreateOrderRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
 
     // ----------------------------------

@@ -4,6 +4,7 @@ namespace Omnipay\Twispay;
 
 use Omnipay\Tests\GatewayTestCase;
 use Omnipay\Twispay\Message\CreateCustomerResponse;
+use Omnipay\Twispay\Message\CreateOrderResponse;
 use Omnipay\Twispay\Message\FetchCardsResponse;
 use Omnipay\Twispay\Message\FetchCustomersResponse;
 use Omnipay\Twispay\Message\FetchOrdersResponse;
@@ -39,10 +40,28 @@ class GatewayTest extends GatewayTestCase
         $this->gateway = new Gateway($this->getHttpClient(), $this->getHttpRequest());
     }
 
-    /**
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     */
+    public function testCreateOrderSuccess()
+    {
+        $orderData = [
+            'customerId' => 3719,
+            'ip' => 'fe80::b9b9:f09a:265e:d976',
+            'amount' => number_format(1/rand(2,33), 2),
+            'currency' => 'EUR',
+            'orderType' => 'purchase',
+
+            'externalOrderId' => 'test-' . rand(10000, PHP_INT_MAX/922222),
+        ];
+        $response = $this->gateway->createOrder($orderData)->send();
+
+
+        $this->assertInstanceOf(CreateOrderResponse::class, $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Created', $response->getMessage());
+        $this->assertNotEmpty($response->getOrderId());
+        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+    }
+
     public function testFetchOrdersSuccess()
     {
         $parameters = [
