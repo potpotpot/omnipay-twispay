@@ -59,7 +59,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Created', $response->getMessage());
         $this->assertNotEmpty($response->getOrderId());
-        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     public function testFetchOrdersSuccess()
