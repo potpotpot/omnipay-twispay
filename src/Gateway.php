@@ -4,9 +4,9 @@ namespace Omnipay\Twispay;
 
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\RequestInterface;
-use Omnipay\Twispay\Message\AuthorizeRequest;
 use Omnipay\Twispay\Message\CreateCustomerRequest;
 use Omnipay\Twispay\Message\CreateOrderRequest;
+use Omnipay\Twispay\Message\CreateTransactionRequest;
 use Omnipay\Twispay\Message\FetchCardsRequest;
 use Omnipay\Twispay\Message\FetchCustomersRequest;
 use Omnipay\Twispay\Message\FetchOrdersRequest;
@@ -15,7 +15,6 @@ use Omnipay\Twispay\Message\GetCardRequest;
 use Omnipay\Twispay\Message\GetCustomerRequest;
 use Omnipay\Twispay\Message\GetOrderRequest;
 use Omnipay\Twispay\Message\GetTransactionRequest;
-use Omnipay\Twispay\Message\PurchaseRequest;
 
 /**
  * Twispay Gateway
@@ -32,7 +31,6 @@ use Omnipay\Twispay\Message\PurchaseRequest;
  *
  * You can use 4111111111111111 as a card number, any cvv and any exp date in the future.
  *
- * @method \Omnipay\Common\Message\RequestInterface purchase(array $parameters = [])
  * @method \Omnipay\Common\Message\RequestInterface authorize(array $parameters = [])
  * @method \Omnipay\Common\Message\RequestInterface completeAuthorize(array $options = [])
  * @method \Omnipay\Common\Message\RequestInterface capture(array $options = [])
@@ -66,6 +64,16 @@ class Gateway extends AbstractGateway
     private $prodApiHost = 'https://api.twispay.com';
 
     /**
+     * @var string
+     */
+    private $testSecureHost = 'https://secure-stage.twispay.com';
+
+    /**
+     * @var string
+     */
+    private $prodSecureHost = 'https://secure.twispay.com';
+
+    /**
      * @return string
      */
     public function getName()
@@ -75,10 +83,13 @@ class Gateway extends AbstractGateway
 
     // ------------ Requests ------------ //
 
-//    public function purchase(array $parameters = []): RequestInterface
-//    {
-//        return $this->createRequest(PurchaseRequest::class, array_merge($this->getDefaultParameters(), $parameters));
-//    }
+    public function purchase(array $parameters = []): RequestInterface
+    {
+        $parameters['apiUrl'] = $this->getSecureUrl();
+
+        // TODO megszurni az input paramokat hogy csak olyanokat engedjuk at amikkel dolgozni is lehet [andor]
+        return $this->createRequest(CreateTransactionRequest::class, array_merge($this->getDefaultParameters(), $parameters));
+    }
 
 
     // ----------------------------------
@@ -231,6 +242,18 @@ class Gateway extends AbstractGateway
             : $this->prodApiHost;
 
         return $this->parameters->get('apiUrl', $defaultUrl);
+    }
+
+    /**
+     * Get live- or testURL.
+     */
+    public function getSecureUrl()
+    {
+        $defaultUrl = $this->getTestMode()
+            ? $this->testSecureHost
+            : $this->prodSecureHost;
+
+        return $this->parameters->get('secureUrl', $defaultUrl);
     }
 
     public function setApiUrl($value)

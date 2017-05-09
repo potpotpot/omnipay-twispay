@@ -3,13 +3,14 @@
 namespace Omnipay\Twispay\Message;
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
+use Omnipay\Twispay\Checksum;
 
-class PurchaseRequest extends AbstractRequest
+class CreateTransactionRequest extends AbstractRequest
 {
     /**
      * @var string
      */
-    protected $endpoint = '/transaction/';
+    protected $endpoint = '';
 
     /**
      * @return array
@@ -25,36 +26,37 @@ class PurchaseRequest extends AbstractRequest
             'currency' => $this->getCurrency(),
             'description' => $this->getDescription(),
             'orderType' => $this->getOrderType(),
-            'orderId' => $this->getOrderId(),
+//            'orderId' => $this->getOrderId(),
             'checksum' => $this->getChecksum(),
         ];
     }
 
     public function sendData($data)
     {
+        $postData = $this->getData();
+        $postData['checksum'] = Checksum::generate($postData, $this->getApiKey());
+
         try {
-            $httpResponse = $this->post($this->endpoint . $this->getId())->send();
+            $httpResponse = $this->post(
+                $this->endpoint,
+                null,
+                $postData,
+                $this->getParameters()
+            )->send();
+
         } catch (ClientErrorResponseException $e) {
 
-            if (stristr($e->getMessage(), 'Not Found') !== false) {
-                $code = 404;
-                $message = 'Not Found';
-            }
-
-            return $this->response = new PurchaseResponse($this, [
-                'code' => $code,
-                'message' => $message,
-            ]);
-
+            return $this->response = new CreateTransactionResponse($this, $e->getResponse()->json());
         }
 
-        return $this->response = new PurchaseResponse($this, $httpResponse->json());
+        return $this->response = new CreateTransactionResponse($this, (string)$httpResponse->getBody());
     }
 
     public function setIdentifier($value)
     {
         return $this->setParameter('identifier', $value);
     }
+
     public function getIdentifier()
     {
         return $this->getParameter('identifier');
@@ -64,6 +66,7 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('orderType', $value);
     }
+
     public function getOrderType()
     {
         return $this->getParameter('orderType');
@@ -73,6 +76,7 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('orderId', $value);
     }
+
     public function getOrderId()
     {
         return $this->getParameter('orderId');
@@ -82,12 +86,10 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('checksum', $value);
     }
+
     public function getChecksum()
     {
         return $this->getParameter('checksum');
     }
-
-
-
 
 }

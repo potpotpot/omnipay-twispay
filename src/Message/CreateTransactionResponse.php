@@ -5,7 +5,7 @@ namespace Omnipay\Twispay\Message;
 use Omnipay\Common\Message\AbstractResponse;
 
 
-class PurchaseResponse extends AbstractResponse
+class CreateTransactionResponse extends AbstractResponse
 {
     public function isSuccessful()
     {
@@ -24,19 +24,5 @@ class PurchaseResponse extends AbstractResponse
         return $this->data['code'];
     }
 
-    /**
-     * @return array
-     */
-    public function getTransactionData()
-    {
-        return $this->data['data'];
-    }
 
-    /**
-     * @return int
-     */
-    public function getTransactionId()
-    {
-        return $this->getTransactionData()['id'];
-    }
 }

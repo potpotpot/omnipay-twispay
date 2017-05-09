@@ -5,6 +5,7 @@ namespace Omnipay\Twispay;
 use Omnipay\Tests\GatewayTestCase;
 use Omnipay\Twispay\Message\CreateCustomerResponse;
 use Omnipay\Twispay\Message\CreateOrderResponse;
+use Omnipay\Twispay\Message\CreateTransactionResponse;
 use Omnipay\Twispay\Message\FetchCardsResponse;
 use Omnipay\Twispay\Message\FetchCustomersResponse;
 use Omnipay\Twispay\Message\FetchOrdersResponse;
@@ -45,29 +46,29 @@ class GatewayTest extends GatewayTestCase
         $orderData = [
             'customerId' => 3719,
             'ip' => 'fe80::b9b9:f09a:265e:d976',
-            'amount' => number_format(1/rand(2,33), 2),
+//            'amount' => number_format(1 / rand(2, 33), 2),
+            'amount' => 0.01,
             'currency' => 'EUR',
             'orderType' => 'purchase',
 
-            'externalOrderId' => 'test-' . rand(10000, PHP_INT_MAX/922222),
+            'externalOrderId' => 'test-' . rand(10000, PHP_INT_MAX / 922222),
         ];
         $response = $this->gateway->createOrder($orderData)->send();
-
 
         $this->assertInstanceOf(CreateOrderResponse::class, $response);
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Created', $response->getMessage());
         $this->assertNotEmpty($response->getOrderId());
-//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+                print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     public function testFetchOrdersSuccess()
     {
         $parameters = [
             'siteId' => [73],
-//            'externalOrderId' => 'sssss',
-//            'customerId' => 3719,
+            //            'externalOrderId' => 'sssss',
+            //            'customerId' => 3719,
         ];
         $response = $this->gateway->fetchOrders($parameters)->send();
 
@@ -76,7 +77,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Success', $response->getMessage());
         $this->assertNotEmpty($response->getData());
-//        print_r([__METHOD__ . __LINE__, $response->getData()]);exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getData()]);exit;
     }
 
     public function testFetchOrdersFailure()
@@ -88,7 +89,7 @@ class GatewayTest extends GatewayTestCase
 
     public function testGetOrderNotFound()
     {
-        $response = $this->gateway->getOrder(rand(PHP_INT_MAX/2, PHP_INT_MAX))->send();
+        $response = $this->gateway->getOrder(rand(PHP_INT_MAX / 2, PHP_INT_MAX))->send();
 
         $this->assertInstanceOf(GetOrderResponse::class, $response);
         $this->assertFalse($response->isSuccessful());
@@ -96,7 +97,7 @@ class GatewayTest extends GatewayTestCase
 
         $this->assertSame('Not Found', $response->getMessage());
         $this->assertEquals(404, $response->getCode());
-//        print_r([__METHOD__ . __LINE__, $response->getErrors()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getErrors()]); exit;
     }
 
     public function testGetOrderSuccess()
@@ -110,10 +111,8 @@ class GatewayTest extends GatewayTestCase
 
         $this->assertNotEmpty($response->getOrderData());
         $this->assertEquals(10075, $response->getOrderId());
-//        print_r([__METHOD__ . __LINE__, $response->getOrderData()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getOrderData()]); exit;
     }
-
-
 
     /**
      * @throws \PHPUnit_Framework_AssertionFailedError
@@ -127,7 +126,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Success', $response->getMessage());
-//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     /**
@@ -317,23 +316,29 @@ class GatewayTest extends GatewayTestCase
         //        print_r([__METHOD__ . __LINE__, $response->getCardData()]); exit;
     }
 
+    public function testPurchaseSuccess()
+    {
+        // card numbers ending in even number should be successful
+        $parameters = [
+            'siteId' => 73,
+            'identifier' => 'tittelandor',
+            'amount' => 0.01,
+            'currency' => 'EUR',
+            'description' => 'test-trans',
+            'orderType' => 'purchase',
+//            'orderId' => 11219,
 
-    //    /**
-    //     * @throws \PHPUnit_Framework_AssertionFailedError
-    //     * @throws \PHPUnit_Framework_Exception
-    //     */
-    //    public function testPurchaseSuccess()
-    //    {
-    //        // card numbers ending in even number should be successful
-    //        $this->options['card']['number'] = '4242424242424242';
-    //        $response = $this->gateway->purchase($this->options)->send();
-    //
-    //        $this->assertInstanceOf('\Omnipay\Twispay\Message\Response', $response);
-    //        $this->assertTrue($response->isSuccessful());
-    //        $this->assertFalse($response->isRedirect());
-    //        $this->assertNotEmpty($response->getTransactionReference());
-    //        $this->assertSame('Success', $response->getMessage());
-    //    }
+        ];
+        $response = $this->gateway->purchase($parameters)->send();
+
+        print_r([__METHOD__ . __LINE__, $response->getData()]);exit;
+
+        $this->assertInstanceOf(CreateTransactionResponse::class, $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertNotEmpty($response->getTransactionReference());
+        $this->assertSame('Success', $response->getMessage());
+    }
     //
     //    /**
     //     * @throws \PHPUnit_Framework_AssertionFailedError
