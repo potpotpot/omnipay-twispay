@@ -75,10 +75,19 @@ class Gateway extends AbstractGateway
         return $this->createRequest(PurchaseRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
 
+
+    // ----------------------------------
+    // ------------ ORDERS   ------------
+    // ----------------------------------
+
     public function fetchOrders(): RequestInterface
     {
         return $this->createRequest(FetchOrdersRequest::class, $this->getDefaultParameters());
     }
+
+    // ----------------------------------
+    // ------------ CUSTOMERS  ----------
+    // ----------------------------------
 
     public function fetchCustomers(array $parameters = []): RequestInterface
     {
@@ -100,6 +109,10 @@ class Gateway extends AbstractGateway
         ];
         return $this->createRequest(GetCustomerRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
+
+    // ----------------------------------
+    // ------------ TRANSACTIONS   ------
+    // ----------------------------------
 
     public function fetchTransactions(array $parameters = []): RequestInterface
     {
