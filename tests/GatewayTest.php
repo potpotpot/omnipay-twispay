@@ -127,6 +127,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Success', $response->getMessage());
+//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     /**
