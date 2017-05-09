@@ -4,6 +4,7 @@ namespace Omnipay\Twispay;
 
 use Omnipay\Tests\GatewayTestCase;
 use Omnipay\Twispay\Message\CreateCustomerResponse;
+use Omnipay\Twispay\Message\FetchCardsResponse;
 use Omnipay\Twispay\Message\FetchCustomersResponse;
 use Omnipay\Twispay\Message\FetchOrdersResponse;
 use Omnipay\Twispay\Message\FetchTransactionsResponse;
@@ -94,7 +95,7 @@ class GatewayTest extends GatewayTestCase
             'identifier' => 'tittelandor',
             'email' => 'andor.tittel@proemergotech.com',
         ];
-//        $filters = [];
+        //        $filters = [];
         $response = $this->gateway->fetchCustomers($filters)->send();
 
         $this->assertInstanceOf(FetchCustomersResponse::class, $response);
@@ -102,7 +103,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Success', $response->getMessage());
 
-//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     /**
@@ -117,10 +118,10 @@ class GatewayTest extends GatewayTestCase
 
     public function testCreateCustomerSuccess()
     {
-        $rand = 'test-' . rand(10000, PHP_INT_MAX/4);
+        $rand = 'test-' . rand(10000, PHP_INT_MAX / 4);
         $customerData = [
             'identifier' => $rand,
-            'email' => $rand  .'@proemergotech.com',
+            'email' => $rand . '@proemergotech.com',
         ];
         $response = $this->gateway->createCustomer($customerData)->send();
 
@@ -130,7 +131,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertSame('Created', $response->getMessage());
         $this->assertNotEmpty($response->getCustomerId());
 
-//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     public function testCreateCustomerFailureMissingMandatoryFields()
@@ -147,7 +148,7 @@ class GatewayTest extends GatewayTestCase
         foreach ($response->getErrors() as $error) {
             $this->assertTrue(in_array($error['code'], [1620, 1646]));
         }
-//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     public function testGetCustomerFailure()
@@ -173,10 +174,8 @@ class GatewayTest extends GatewayTestCase
 
         $this->assertNotEmpty($response->getCustomerData());
         $this->assertEquals(3719, $response->getCustomerId());
-//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
-
-
 
     public function testGetTransactionFailure()
     {
@@ -201,6 +200,32 @@ class GatewayTest extends GatewayTestCase
 
         $this->assertTrue(is_array($response->getTransactionData()));
         $this->assertEquals(16177, $response->getTransactionId());
+    }
+
+    public function testFetchCardsSuccess()
+    {
+        $filters = [
+            'customerId' => 3719,
+        ];
+        $response = $this->gateway->fetchCards($filters)->send();
+        $this->assertInstanceOf(FetchCardsResponse::class, $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Success', $response->getMessage());
+//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+    }
+
+    public function testFetchCardsFailureEmptyFilters()
+    {
+        $filters = [];
+        $response = $this->gateway->fetchCards($filters)->send();
+        $this->assertInstanceOf(FetchCardsResponse::class, $response);
+        $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Bad Request', $response->getMessage());
+        $this->assertSame(1620, $response->getErrors()[0]['code']);
+
+//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     //    /**
