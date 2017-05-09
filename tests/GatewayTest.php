@@ -7,6 +7,7 @@ use Omnipay\Twispay\Message\CreateCustomerResponse;
 use Omnipay\Twispay\Message\FetchCustomersResponse;
 use Omnipay\Twispay\Message\FetchOrdersResponse;
 use Omnipay\Twispay\Message\FetchTransactionsResponse;
+use Omnipay\Twispay\Message\GetCustomerResponse;
 use Omnipay\Twispay\Message\GetTransactionResponse;
 
 /**
@@ -149,9 +150,34 @@ class GatewayTest extends GatewayTestCase
 //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
-    /**
-     *
-     */
+    public function testGetCustomerFailure()
+    {
+        // Set an invalid api key
+        $response = $this->gateway->getCustomer(rand(1, 10))->send();
+        $this->assertInstanceOf(GetCustomerResponse::class, $response);
+        $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+
+        $this->assertSame('Not Found', $response->getMessage());
+        $this->assertSame(404, $response->getCode());
+    }
+
+    public function testGetCustomerSuccess()
+    {
+        /** @var GetTransactionResponse $response */
+        $response = $this->gateway->getCustomer(3719)->send();
+        $this->assertInstanceOf(GetCustomerResponse::class, $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Success', $response->getMessage());
+
+        $this->assertNotEmpty($response->getCustomerData());
+        $this->assertEquals(3719, $response->getCustomerId());
+//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+    }
+
+
+
     public function testGetTransactionFailure()
     {
         // Set an invalid api key

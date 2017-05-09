@@ -9,6 +9,7 @@ use Omnipay\Twispay\Message\CreateCustomerRequest;
 use Omnipay\Twispay\Message\FetchCustomersRequest;
 use Omnipay\Twispay\Message\FetchOrdersRequest;
 use Omnipay\Twispay\Message\FetchTransactionsRequest;
+use Omnipay\Twispay\Message\GetCustomerRequest;
 use Omnipay\Twispay\Message\GetTransactionRequest;
 use Omnipay\Twispay\Message\PurchaseRequest;
 
@@ -89,6 +90,15 @@ class Gateway extends AbstractGateway
     {
         // TODO megszurni az input paramokat hogy csak olyanokat engedjuk at amikkel dolgozni is lehet [andor]
         return $this->createRequest(CreateCustomerRequest::class, array_merge($this->getDefaultParameters(), $parameters));
+    }
+
+    public function getCustomer($id): RequestInterface
+    {
+        // TODO megszurni az input paramokat hogy csak olyanokat engedjuk at amikkel dolgozni is lehet [andor]
+        $parameters = [
+            'id' => $id,
+        ];
+        return $this->createRequest(GetCustomerRequest::class, array_merge($this->getDefaultParameters(), $parameters));
     }
 
     public function fetchTransactions(array $parameters = []): RequestInterface
