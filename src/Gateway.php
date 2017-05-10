@@ -46,7 +46,7 @@ class Gateway extends AbstractGateway
     /**
      * @var string
      */
-    private $apiKey = '4d4cab364364f3dcb88f9c69c305573a';
+    private $apiKey = '';
 
     /**
      * @var int

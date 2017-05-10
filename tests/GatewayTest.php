@@ -39,6 +39,9 @@ class GatewayTest extends GatewayTestCase
         parent::setUp();
 
         $this->gateway = new Gateway($this->getHttpClient(), $this->getHttpRequest());
+
+        $key = file_get_contents( __DIR__ . '/../.api_key');
+        $this->gateway->setApiKey(trim($key));
     }
 
     public function testCreateOrderSuccess()
