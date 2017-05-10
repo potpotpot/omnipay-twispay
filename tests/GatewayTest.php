@@ -148,7 +148,7 @@ class GatewayTest extends GatewayTestCase
     public function testFetchCustomersSuccess()
     {
         $filters = [
-            'identifier' => 'tittelandor',
+//            'identifier' => 'tittelandor',
             'email' => 'andor.tittel@proemergotech.com',
         ];
         //        $filters = [];
@@ -159,7 +159,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Success', $response->getMessage());
 
-        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+                print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     /**
