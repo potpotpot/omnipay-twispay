@@ -26,7 +26,7 @@ class CreateTransactionRequest extends AbstractRequest
             'currency' => $this->getCurrency(),
             'description' => $this->getDescription(),
             'orderType' => $this->getOrderType(),
-//            'orderId' => $this->getOrderId(),
+            'orderId' => $this->getOrderId(),
             'checksum' => $this->getChecksum(),
         ];
     }
