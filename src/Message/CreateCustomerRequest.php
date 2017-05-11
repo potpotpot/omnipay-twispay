@@ -24,6 +24,9 @@ class CreateCustomerRequest extends AbstractRequest
             'identifier' => $this->getIdentifier(),
             'siteId' => $this->getSiteId(),
             'email' => $this->getEmail(),
+            'country' => $this->getCountry(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
         ];
 
         return $data;
@@ -81,5 +84,52 @@ class CreateCustomerRequest extends AbstractRequest
     public function setEmail($value)
     {
         return $this->parameters->set('email', $value);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountry()
+    {
+        return $this->parameters->get('country');
+    }
+
+    /**
+     * @param $value
+     */
+    public function setCountry($value)
+    {
+        return $this->parameters->set('country', $value);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
+    {
+        return $this->parameters->get('firstName');
+    }
+
+    /**
+     * @param $value
+     */
+    public function setFirstName($value)
+    {
+        return $this->parameters->set('firstName', $value);
+    }
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->parameters->get('lastName');
+    }
+
+    /**
+     * @param $value
+     */
+    public function setLastName($value)
+    {
+        return $this->parameters->set('lastName', $value);
     }
 }
