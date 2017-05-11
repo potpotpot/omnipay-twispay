@@ -33,4 +33,9 @@ class GetCustomerResponse extends AbstractResponse
         return $this->data['data']['id'];
     }
 
+    public function getErrors()
+    {
+        return $this->data['error'];
+    }
+
 }
