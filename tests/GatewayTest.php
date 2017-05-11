@@ -40,7 +40,7 @@ class GatewayTest extends GatewayTestCase
 
         $this->gateway = new Gateway($this->getHttpClient(), $this->getHttpRequest());
 
-        $key = file_get_contents( __DIR__ . '/../.api_key');
+        $key = file_get_contents(__DIR__ . '/../.api_key');
         $this->gateway->setApiKey(trim($key));
     }
 
@@ -148,7 +148,7 @@ class GatewayTest extends GatewayTestCase
     public function testFetchCustomersSuccess()
     {
         $filters = [
-//            'identifier' => 'tittelandor',
+            //            'identifier' => 'tittelandor',
             'email' => 'andor.tittel@proemergotech.com',
         ];
         //        $filters = [];
@@ -159,17 +159,22 @@ class GatewayTest extends GatewayTestCase
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Success', $response->getMessage());
 
-                print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+        //                print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
-    /**
-     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
-     */
     public function testFetchCustomersFailure()
     {
         // Set an invalid api key
         $this->gateway->setApiKey('XXXXXX');
-        $this->gateway->fetchCustomers()->send();
+        $response = $this->gateway->fetchCustomers()->send();
+
+        $this->assertInstanceOf(FetchCustomersResponse::class, $response);
+        $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertSame('Unauthorized', $response->getMessage());
+        $this->assertEquals('401', $response->getCode());
+
+//        print_r([__METHOD__ . __LINE__, $response->getData()]);exit;
     }
 
     public function testCreateCustomerSuccess()
@@ -333,7 +338,7 @@ class GatewayTest extends GatewayTestCase
         ];
         $response = $this->gateway->purchase($parameters)->send();
 
-//        print_r([__METHOD__ . __LINE__, $response->getData()]);exit;
+        //        print_r([__METHOD__ . __LINE__, $response->getData()]);exit;
 
         $this->assertInstanceOf(CreateTransactionResponse::class, $response);
         //        $this->assertTrue($response->isSuccessful());

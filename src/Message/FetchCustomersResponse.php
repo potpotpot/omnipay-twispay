@@ -19,6 +19,11 @@ class FetchCustomersResponse extends AbstractResponse
         return $this->data['message'];
     }
 
+    public function getCode()
+    {
+        return $this->data['code'];
+    }
+
     public function getTotalItemCount()
     {
         return $this->data['pagination']['totalItemCount'];
