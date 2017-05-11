@@ -4,6 +4,10 @@ namespace Omnipay\Twispay\Message;
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
+/**
+ * Class GetCustomerRequest
+ * @package Omnipay\Twispay\Message
+ */
 class GetCustomerRequest extends AbstractRequest
 {
     /**
@@ -23,32 +27,38 @@ class GetCustomerRequest extends AbstractRequest
         ];
     }
 
-    public function getId()
-    {
-        return $this->getParameter('id');
-    }
-
+    /**
+     * @param mixed $data
+     *
+     * @return GetCustomerResponse
+     * @throws \Guzzle\Common\Exception\RuntimeException
+     * @throws \Guzzle\Http\Exception\RequestException
+     */
     public function sendData($data)
     {
         try {
             $httpResponse = $this->get($this->endpoint . $this->getId())->send();
         } catch (ClientErrorResponseException $e) {
-
-            if (stristr($e->getMessage(), 'Not Found') !== false) {
-                $code = 404;
-                $message = 'Not Found';
-            }
-
-            return $this->response = new GetCustomerResponse($this, [
-                'code' => $code,
-                'message' => $message,
-            ]);
-
+            return $this->response = new GetCustomerResponse($this, $e->getResponse()->json());
         }
 
         return $this->response = new GetCustomerResponse($this, $httpResponse->json());
     }
 
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->getParameter('id');
+    }
+
+    /**
+     * @param $value
+     *
+     * @return \Omnipay\Common\Message\AbstractRequest
+     * @throws \Omnipay\Common\Exception\RuntimeException
+     */
     public function setId($value)
     {
         return $this->setParameter('id', $value);

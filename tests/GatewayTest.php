@@ -212,9 +212,8 @@ class GatewayTest extends GatewayTestCase
         //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
-    public function testGetCustomerFailure()
+    public function testGetCustomerFailureNotFound()
     {
-        // Set an invalid api key
         $response = $this->gateway->getCustomer(rand(1, 10))->send();
         $this->assertInstanceOf(GetCustomerResponse::class, $response);
         $this->assertFalse($response->isSuccessful());
@@ -222,6 +221,20 @@ class GatewayTest extends GatewayTestCase
 
         $this->assertSame('Not Found', $response->getMessage());
         $this->assertSame(404, $response->getCode());
+
+//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+    }
+
+    public function testGetCustomerFailureInvalid()
+    {
+        $response = $this->gateway->getCustomer(0)->send();
+//        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
+        $this->assertInstanceOf(GetCustomerResponse::class, $response);
+        $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+
+        $this->assertSame('Bad Request', $response->getMessage());
+        $this->assertSame(400, $response->getCode());
     }
 
     public function testGetCustomerSuccess()
