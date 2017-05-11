@@ -179,20 +179,20 @@ class GatewayTest extends GatewayTestCase
 
     public function testCreateCustomerSuccess()
     {
-        $rand = 'test-' . rand(10000, PHP_INT_MAX / 4);
+        $rand = '_33deaffe-da9d-9a33-93ab-' . rand(1000,9999);
         $customerData = [
             'identifier' => $rand,
             'email' => $rand . '@proemergotech.com',
         ];
         $response = $this->gateway->createCustomer($customerData)->send();
 
+//        print_r([__METHOD__ . __LINE__, $response->getData(), $response->getCustomerId()]);
+
         $this->assertInstanceOf(CreateCustomerResponse::class, $response);
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
         $this->assertSame('Created', $response->getMessage());
         $this->assertNotEmpty($response->getCustomerId());
-
-        //        print_r([__METHOD__ . __LINE__, $response->getData()]); exit;
     }
 
     public function testCreateCustomerFailureMissingMandatoryFields()
