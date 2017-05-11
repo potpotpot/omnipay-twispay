@@ -28,4 +28,9 @@ class FetchCustomersResponse extends AbstractResponse
     {
         return $this->data['pagination']['totalItemCount'];
     }
+
+    public function getErrors()
+    {
+        return $this->data['error'];
+    }
 }
