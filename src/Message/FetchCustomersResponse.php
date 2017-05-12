@@ -33,4 +33,9 @@ class FetchCustomersResponse extends AbstractResponse
     {
         return $this->data['error'];
     }
+
+    public function getCustomerData()
+    {
+        return $this->data['data'];
+    }
 }
